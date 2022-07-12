@@ -262,7 +262,7 @@ public class MovementController3D : MonoBehaviour
         Vector3 countermovementForce = (-_rigidbody.velocity.NoY() * _rigidbody.mass / Time.fixedDeltaTime) * _counterMovementFactor;
         _rigidbody.AddForce(countermovementForce, ForceMode.Force);
 
-        Vector3 movement = _cameraTransformation.MultiplyVector((_finalMovementInput() * _movementSpeed).SwapYZ());
+        Vector3 movement = _cameraTransformation.MultiplyVector((_finalMovementInput()).SwapYZ()).normalized.NoY() * _movementSpeed;
         _rigidbody.AddForce(movement, ForceMode.Force);
 
         Vector3 extraGravityForce = -_extraGravityForce * _groundDirection;
