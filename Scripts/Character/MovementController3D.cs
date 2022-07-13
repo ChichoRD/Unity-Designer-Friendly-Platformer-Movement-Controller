@@ -14,15 +14,15 @@ public class MovementController3D : MonoBehaviour
     [SerializeField] private InputActionReference _dashAction;
 
     [Header("Movement")]
-    [SerializeField] private Camera _camera;
-    [SerializeField] private bool _useCameraTransformation = true;
+    [SerializeField] private Transform _customTransformator;
+    [SerializeField] private bool _useCustomTransformation = true;
 
-    public bool UseCameraTransformation
+    public bool UseCustomTransformation
     {
-        get => _useCameraTransformation;
+        get => _useCustomTransformation;
         set
         {
-            _useCameraTransformation = value;
+            _useCustomTransformation = value;
         }
     }
 
@@ -40,6 +40,7 @@ public class MovementController3D : MonoBehaviour
     private Coroutine _deccelerationRoutine;
     [SerializeField][Min(0)] private float _landMovementBoost = 8f;
 
+    private Rigidbody _rigidbody;
     private float _elapsedMovementTime;
     private float _elapsedStopedTime;
     private Vector2 _lastMovementInput;
@@ -76,6 +77,13 @@ public class MovementController3D : MonoBehaviour
     [SerializeField][Min(10e-4f)] private float _raycastDensity = 3f;
     [SerializeField][Min(0)] private float _raycastsLength = 0.3f;
     [SerializeField] private LayerMask _jumpableLayers;
+    [SerializeField] private Transform _groundCheckCenter;
+
+    [Space]
+    [SerializeField] private Transform _minStepHeightCheck;
+    [SerializeField][Min(0)] private float _maxStepHeight = 0.6f;
+    [SerializeField][Min(0)] private float _maxStepDistance = 0.5f;
+    [SerializeField] private LayerMask _steppableLayers;
 
     [Header("Jump Settings")]
     [SerializeField] private float _maxJumpImpulse;
@@ -142,13 +150,22 @@ public class MovementController3D : MonoBehaviour
 
     public event Action OnDescentStarted;
 
-    [Header("Components")]
-    private Rigidbody _rigidbody;
-    [SerializeField] private Transform _groundCheckCenter;
 
+    [Header("Animation")]
+    [SerializeField][Range(0f, 1f)] private float _rotationSpeed = 0.1f;
+    [SerializeField] private string _movementVelocityYParameter = "MovementVelocityY";
+    [SerializeField] private string _movementVelocityXParameter = "MovementVelocityX";
+    [SerializeField] private string _movementVelocityMagnitudeParameter = "MovementSpeed";
+    [SerializeField] private string _onJumpParameter = "OnJump";
+    [SerializeField] private string _onLandParameter = "OnLand";
+    private Animator _animator;
+    private Action<Vector2> _movementAnimationUpdate;
+        
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _animator = GetComponentInChildren<Animator>();
+
         var temp = _dasher;
         _dasher = new Dasher3D(temp, _rigidbody);
 
@@ -159,30 +176,46 @@ public class MovementController3D : MonoBehaviour
         OnMovementEnded += BeginDecceleration;
 
         if (_jumpAction != null)
-        {           
+        {
             _jumpAction.action.performed += OnJumpPerformed;
             _jumpAction.action.canceled += OnJumpCanceled;
         }
 
         if (_dashAction != null)
-        {           
+        {
             _dashAction.action.performed += OnDashPerformed;
         }
 
         OnDescentStarted += ApplyFallGravity;
-        OnLanded.AddListener(ResetExtraGravity);
 
+        OnLanded.AddListener(ResetExtraGravity);
         OnLeftGround.AddListener(OnLeftGroundCoyoteTime);
 
-        if (UseCameraTransformation)
+        AnimationEvents();
+
+        if (UseCustomTransformation)
         {
-            TransformationToCameraFoward();
+            TransformationToCustomFoward();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             return;
         }
 
         TransformationToWorldDefault();
+
+        void AnimationEvents()
+        {
+            if (_animator != null)
+            {
+                OnLanded.AddListener(AnimatorLandSet);
+                OnLeftGround.AddListener(AnimatorJumpSet);
+                _movementAnimationUpdate = AnimatorMovementSet;
+
+                return;
+            }
+
+            _movementAnimationUpdate = _ => { };
+        }
     }
 
     private void OnEnable()
@@ -219,9 +252,15 @@ public class MovementController3D : MonoBehaviour
         }
         
         OnDescentStarted -= ApplyFallGravity;
+        
         OnLanded.RemoveListener(ResetExtraGravity);
-
         OnLeftGround.RemoveListener(OnLeftGroundCoyoteTime);
+
+        if (_animator != null)
+        {
+            OnLanded.RemoveListener(AnimatorLandSet);
+            OnLeftGround.RemoveListener(AnimatorJumpSet);
+        }
     }
 
     private void Update()
@@ -232,6 +271,8 @@ public class MovementController3D : MonoBehaviour
         VelocityY = _rigidbody.velocity.y;
 
         GroundCheck();
+
+        StepCheck();
 
         void GroundCheck()
         {
@@ -262,11 +303,16 @@ public class MovementController3D : MonoBehaviour
         Vector3 countermovementForce = (-_rigidbody.velocity.NoY() * _rigidbody.mass / Time.fixedDeltaTime) * _counterMovementFactor;
         _rigidbody.AddForce(countermovementForce, ForceMode.Force);
 
-        Vector3 movement = _cameraTransformation.MultiplyVector((_finalMovementInput()).SwapYZ()).normalized.NoY() * _movementSpeed;
+        Vector2 rawMovement = _finalMovementInput() * _movementSpeed / _maxMovementSpeed;
+        _movementAnimationUpdate.Invoke(rawMovement);
+
+        Vector3 movement = _cameraTransformation.MultiplyVector((_finalMovementInput()).SwapYZ()).NoY().normalized * _movementSpeed;
         _rigidbody.AddForce(movement, ForceMode.Force);
 
         Vector3 extraGravityForce = -_extraGravityForce * _groundDirection;
         _rigidbody.AddForce(extraGravityForce, ForceMode.Force);
+
+        RoationSet(movement);
     }
 
     private void OnValidate()
@@ -301,6 +347,8 @@ public class MovementController3D : MonoBehaviour
 
         DrawJumpDistances();
 
+        DrawStepChecks();
+
         void DebugGroundChecks()
         {
             if (_groundCheckCenter == null || _raycastDensity == 0) return;
@@ -324,6 +372,21 @@ public class MovementController3D : MonoBehaviour
 
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, transform.position + _jumpDirection * _minJumpHeight);
+        }
+
+        void DrawStepChecks()
+        {
+            if (_minStepHeightCheck == null || _cameraTransformation == null) return;
+            
+            Vector3 minStepOrigin = _minStepHeightCheck.position;
+            Vector3 maxStepOrigin = minStepOrigin + _jumpDirection * _maxStepHeight;
+
+            Vector3 size = new Vector3(_maxStepDistance * 2, Time.fixedDeltaTime, _maxStepDistance * 2);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(minStepOrigin, size);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(maxStepOrigin, size);
         }
     }
 
@@ -468,8 +531,38 @@ public class MovementController3D : MonoBehaviour
         }
     }
 
-    private void TransformationToCameraFoward() => _transformationAssignment = () => _cameraTransformation = new Matrix4x4(_camera.transform.right, _camera.transform.up, _camera.transform.forward, new Vector4(0, 0, 0, 1));
+    private void TransformationToCustomFoward() => _transformationAssignment = () => _cameraTransformation = new Matrix4x4(_customTransformator.right, _customTransformator.up, _customTransformator.forward, new Vector4(0, 0, 0, 1));
 
     private void TransformationToWorldDefault() => _transformationAssignment = () => _cameraTransformation = Matrix4x4.identity;
+
+    public void AnimatorJumpSet() => _animator.SetTrigger(_onJumpParameter);
+    public void AnimatorLandSet() => _animator.SetTrigger(_onLandParameter);
+    public void AnimatorMovementSet(Vector2 movement)
+    {
+        _animator.SetFloat(_movementVelocityXParameter, movement.x);
+        _animator.SetFloat(_movementVelocityYParameter, movement.y);
+        _animator.SetFloat(_movementVelocityMagnitudeParameter, movement.sqrMagnitude);
+    }
+    
+    private void RoationSet(Vector3 movement)
+    {
+        const float THRESHOLD = 0.1f;
+        if (movement.sqrMagnitude < THRESHOLD) return;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement, _jumpDirection), _rotationSpeed);
+    }
+
+    private void StepCheck()
+    {
+        Vector3 minStepOrigin = _minStepHeightCheck.position;
+        Vector3 maxStepOrigin = minStepOrigin + _jumpDirection * _maxStepHeight;
+
+        Vector3 direction = _cameraTransformation.MultiplyVector((_finalMovementInput()).SwapYZ()).NoY().normalized;
+
+        if (!Physics.Raycast(minStepOrigin, direction, out RaycastHit hit, _maxStepDistance, _steppableLayers) || Physics.Raycast(maxStepOrigin, direction, _maxStepDistance, _steppableLayers) || VelocityY < 0) return;
+
+        Vector3 offset = -_minStepHeightCheck.localPosition;
+        Vector3 tp = new Vector3(hit.point.x, maxStepOrigin.y, hit.point.z);
+        transform.position = tp + offset;
+    }
 
 }
