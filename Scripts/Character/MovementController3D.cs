@@ -84,6 +84,7 @@ public class MovementController3D : MonoBehaviour
     [SerializeField][Min(0)] private float _maxStepHeight = 0.6f;
     [SerializeField][Min(0)] private float _maxStepDistance = 0.5f;
     [SerializeField] private LayerMask _steppableLayers;
+    [SerializeField] private bool _elevateOnly = false;
 
     [Header("Jump Settings")]
     [SerializeField] private float _maxJumpImpulse;
@@ -561,7 +562,7 @@ public class MovementController3D : MonoBehaviour
         if (!Physics.Raycast(minStepOrigin, direction, out RaycastHit hit, _maxStepDistance, _steppableLayers) || Physics.Raycast(maxStepOrigin, direction, _maxStepDistance, _steppableLayers) || VelocityY < 0) return;
 
         Vector3 offset = -_minStepHeightCheck.localPosition;
-        Vector3 tp = new Vector3(hit.point.x, maxStepOrigin.y, hit.point.z);
+        Vector3 tp = new Vector3(_elevateOnly ? minStepOrigin.x : hit.point.x, maxStepOrigin.y, _elevateOnly ? minStepOrigin.z : hit.point.z);
         transform.position = tp + offset;
     }
 
