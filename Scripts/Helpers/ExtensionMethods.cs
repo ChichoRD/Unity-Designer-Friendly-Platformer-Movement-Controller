@@ -457,6 +457,7 @@ namespace ChichoExtensions
 
         public static Vector2 InvertY(this Vector2 vector) => new Vector2(vector.x, -vector.y);
         public static Vector3 NoY(this Vector3 vector) => new Vector3(vector.x, 0, vector.z);
+        public static Vector2 NoY(this Vector2 vector) => new Vector2(vector.x, 0);
 
         public static float NormalizeAngle(float angle)
         {
@@ -643,7 +644,7 @@ namespace ChichoExtensions
             }
         }
 
-        public static bool TryGetComponentInChildren<T>(this GameObject go, out T component) where T : Component
+        public static bool TryGetComponentInChildren<T>(this GameObject go, out T component)
         {
             var comp = go.GetComponentInChildren<T>();
             component = comp;
