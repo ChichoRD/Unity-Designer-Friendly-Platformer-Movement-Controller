@@ -119,7 +119,8 @@ public class MovementController3D : MonoBehaviour
     [SerializeField][Min(0)] private float _maxJumpHeight = 8f;
     [SerializeField][Min(0)] private float _maxJumpTime = 1f;
     [SerializeField][Min(0)] private float _minJumpHeight = 2f;
-
+    [SerializeField][Min(0)] private float _minDescentTime = 1f;
+    
     private float _jumpTimeElapsed;
     private Coroutine _jumpTimeRoutine;
     private Vector3 _jumpDirection = Vector3.up;
@@ -427,6 +428,10 @@ public class MovementController3D : MonoBehaviour
             const float VELOCITY_TO_FORCE_FACTOR = 1.1589404f;
             float maxMovementForce = _maxMovementSpeed * _counterMovementFactor * _rigidbody.mass / Time.fixedDeltaTime * VELOCITY_TO_FORCE_FACTOR;
             _maxMovementForce = maxMovementForce;
+
+            float extraFallGravity = (-2 * _maxJumpHeight / Mathf.Pow(_minDescentTime, 2)) - Physics2D.gravity.y;
+            float extraFallGravityForce = extraFallGravity * _rigidbody.mass;
+            _fallExtraGravityMultiplier = extraFallGravityForce / _defaultExtraGravityForce;
         }
     }
 
@@ -438,7 +443,7 @@ public class MovementController3D : MonoBehaviour
 
         DrawStepChecks();
 
-        DrawMaximumJumpArc();
+        DrawMaximumJumpArc(_maxJumpImpulse);
 
         void DebugGroundChecks()
         {
@@ -480,9 +485,9 @@ public class MovementController3D : MonoBehaviour
             Gizmos.DrawWireCube(maxStepOrigin, size);
         }
 
-        void DrawMaximumJumpArc()
+        void DrawMaximumJumpArc(float impulse)
         {
-            float jumpVelocity = _maxJumpImpulse / _rigidbody.mass;
+            float jumpVelocity = impulse / _rigidbody.mass;
             float addedAcceleration = Physics.gravity.y + _defaultExtraGravityForce / _rigidbody.mass;
             float dt = Time.fixedDeltaTime;
 
