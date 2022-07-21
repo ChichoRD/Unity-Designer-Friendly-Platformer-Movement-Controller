@@ -172,7 +172,7 @@ public class MovementController2D : MonoBehaviour
 
     #region Animation
     [Header("Animation")]
-    [SerializeField][Range(0f, 1f)] private float _rotationSpeed = 0.1f;
+    [SerializeField][Range(0f, 1f)] private float _rotationSpeed = 0f;
     [SerializeField] private string _movementVelocityYParameter = "MovementVelocityY";
     [SerializeField] private string _movementVelocityXParameter = "MovementVelocityX";
     [SerializeField] private string _movementVelocityMagnitudeParameter = "MovementSpeed";
