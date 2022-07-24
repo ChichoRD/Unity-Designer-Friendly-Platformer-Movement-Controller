@@ -13,6 +13,7 @@ public class MovementController3D : MonoBehaviour
     [SerializeField] private InputActionReference _movementAction;
     [SerializeField] private InputActionReference _jumpAction;
     [SerializeField] private InputActionReference _dashAction;
+    [SerializeField] private InputActionReference _dashDirectionAction;
 
     #endregion
 
@@ -91,7 +92,10 @@ public class MovementController3D : MonoBehaviour
     [SerializeField] private LayerMask _jumpableLayers;
     [SerializeField] private Transform _groundCheckCenter;
     [SerializeField][Range(0f, 90f)] private float _maxJumpAngle = 45f;
+    [SerializeField][Min(0)] private int _defaultJumpsAmount = 1;
+    public int JumpsRemaining { get; set; }
 
+    
     [Space]
     [SerializeField] private Transform _minStepHeightCheck;
     [SerializeField][Min(0)] private float _maxStepHeight = 0.6f;
@@ -203,6 +207,10 @@ public class MovementController3D : MonoBehaviour
         {
             _jumpAction.action.performed += OnJumpPerformed;
             _jumpAction.action.canceled += OnJumpCanceled;
+
+            ResetRemainingJumps();
+            OnLanded.AddListener(ResetRemainingJumps);
+            OnJump += DecreaseRemainingJumps;
         }
 
         //Dash Inputs
@@ -275,6 +283,9 @@ public class MovementController3D : MonoBehaviour
         {
             _jumpAction.action.performed -= OnJumpPerformed;
             _jumpAction.action.canceled -= OnJumpCanceled;
+
+            OnLanded.RemoveListener(ResetRemainingJumps);
+            OnJump -= DecreaseRemainingJumps;
         }
 
         if (_dashAction != null)
@@ -379,7 +390,7 @@ public class MovementController3D : MonoBehaviour
             averageNormal.Normalize();
 
             float angle = Vector3.Angle(_jumpDirection, averageNormal);
-            OnGround = averageNormal != Vector3.zero && angle < _maxJumpAngle;
+            OnGround = averageNormal != Vector3.zero && angle < _maxJumpAngle && VelocityY <= 0;
         }
     }
 
@@ -425,8 +436,13 @@ public class MovementController3D : MonoBehaviour
             float minJumpTime = Mathf.Max((2 * _minJumpHeight) / maxJumpVelocity - _jumpKillDelay, 0f);
             _minJumpTime = minJumpTime;
 
-            const float VELOCITY_TO_FORCE_FACTOR = 1.1589404f;
-            float maxMovementForce = _maxMovementSpeed * _counterMovementFactor * _rigidbody.mass / Time.fixedDeltaTime * VELOCITY_TO_FORCE_FACTOR;
+            //(v - dv) * r = f * dt / m
+            //(v - dv) * r = dv
+            //(v * r - dv * r) = dv
+            //v * r = dv * (r + 1)
+            //(v * r) / (r + 1) = dv
+            //(v * r * m) / ((r + 1) * dt) = f
+            float maxMovementForce = (_maxMovementSpeed * _counterMovementFactor * _rigidbody.mass) / (Time.fixedDeltaTime);
             _maxMovementForce = maxMovementForce;
 
             float extraFallGravity = (-2 * _maxJumpHeight / Mathf.Pow(_minDescentTime, 2)) - Physics2D.gravity.y;
@@ -528,7 +544,7 @@ public class MovementController3D : MonoBehaviour
     {
         if (!obj.ReadValueAsButton()) return;
         
-        if (!OnGround && _coyoteTimeRoutine == null)
+        if (JumpsRemaining <= 0 && _coyoteTimeRoutine == null)
         {
             _jumpBufferTimeRoutine ??= StartCoroutine(JumpBufferTimeRoutine());
             return;
@@ -629,7 +645,11 @@ public class MovementController3D : MonoBehaviour
         if (_jumpBufferTimeRoutine == null) return;
         PerformJump();
     }
-    
+
+    private void ResetRemainingJumps() => JumpsRemaining = _defaultJumpsAmount;
+
+    private void DecreaseRemainingJumps() => JumpsRemaining--;
+
     #endregion
 
     #region Accelerations Logic
@@ -701,7 +721,8 @@ public class MovementController3D : MonoBehaviour
 
     private void OnDashPerformed(InputAction.CallbackContext obj)
     {
-        _dasher.Dash(_customTransformation.MultiplyVector(_finalMovementInput().SwapYZ()).NoY());
+        Vector3 input = _dashDirectionAction == null ? _finalMovementInput().SwapYZ() : _dashDirectionAction.action.ReadValue<Vector2>();
+        _dasher.Dash(_customTransformation.MultiplyVector(input).NoY());
     }
 
     private void TransformationToCustomFoward() => _transformationAssignment = () => _customTransformation = new Matrix4x4(_customTransformator.right, _customTransformator.up, _customTransformator.forward, new Vector4(0, 0, 0, 1));
