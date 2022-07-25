@@ -37,6 +37,10 @@ Preset:
     value: 
     objectReference: {fileID: 6839635208545876723, guid: 025ffc9bba52ac642978e1e365f3273a, type: 3}
   - target: {fileID: 0}
+    propertyPath: _dashDirectionAction
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: _customTransformator
     value: 
     objectReference: {fileID: 0}
@@ -46,7 +50,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationTime
-    value: 0.48
+    value: 1.2
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationCurve.m_Curve.Array.size
@@ -150,7 +154,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationTime
-    value: 0.54
+    value: 0.6
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationCurve.m_Curve.Array.size
@@ -238,7 +242,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _maxMovementForce
-    value: 79.27153
+    value: 75
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _counterMovementFactor
@@ -246,7 +250,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _maxMovementSpeed
-    value: 6.84
+    value: 7.5
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _groundChecksExtents.x
@@ -277,6 +281,10 @@ Preset:
     value: 45
     objectReference: {fileID: 0}
   - target: {fileID: 0}
+    propertyPath: _defaultJumpsAmount
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: _minStepHeightCheck
     value: 
     objectReference: {fileID: 0}
@@ -302,19 +310,19 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _maxJumpImpulse
-    value: 10
+    value: 12
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _minJumpTime
-    value: 0.2
+    value: 0.13333333
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _defaultExtraGravityForce
-    value: -2.6899986
+    value: -7.3328567
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _fallExtraGravityMultiplier
-    value: 14.940526
+    value: 5.8217416
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _jumpKillDelay
@@ -322,7 +330,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _coyoteTime
-    value: 0.35
+    value: 0.1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _jumpBufferTime
@@ -334,11 +342,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _maxJumpHeight
-    value: 4
+    value: 4.2
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _maxJumpTime
-    value: 0.8
+    value: 0.7
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _minJumpHeight

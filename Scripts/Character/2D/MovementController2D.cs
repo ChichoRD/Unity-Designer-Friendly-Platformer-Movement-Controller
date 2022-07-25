@@ -658,10 +658,15 @@ public class MovementController2D : MonoBehaviour
     {
         WaitForFixedUpdate wait = new WaitForFixedUpdate();
         _elapsedMovementTime = 0f;
+        float min = _currentMovementForce;
+        float max = _maxMovementForce;
+
+        float nMin = min / max;
+
         while (_currentMovementForce < _maxMovementForce)
         {
             _elapsedMovementTime += Time.fixedDeltaTime;
-            _currentMovementForce = _accelerationCurve.Evaluate(_elapsedMovementTime / _accelerationTime) * _maxMovementForce;
+            _currentMovementForce = (_accelerationCurve.Evaluate(_elapsedMovementTime / _accelerationTime) * (1 - nMin) + nMin) * max;
             yield return wait;
         }
 
@@ -673,10 +678,12 @@ public class MovementController2D : MonoBehaviour
     {
         WaitForFixedUpdate wait = new WaitForFixedUpdate();
         _elapsedStopedTime = 0f;
+        float max = _currentMovementForce;
+        
         while (_currentMovementForce > 0f)
         {
             _elapsedStopedTime += Time.fixedDeltaTime;
-            _currentMovementForce = _deccelerationCurve.Evaluate(_elapsedStopedTime / _deccelerationTime) * _maxMovementForce;
+            _currentMovementForce = _deccelerationCurve.Evaluate(_elapsedStopedTime / _deccelerationTime) * max;
             yield return wait;
         }
 
