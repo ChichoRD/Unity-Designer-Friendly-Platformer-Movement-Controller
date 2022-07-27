@@ -76,6 +76,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Dash Direction",
+                    "type": "PassThrough",
+                    "id": "e16b82b4-ef00-4ca6-b1d5-548eea16d493",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -443,6 +452,17 @@
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "",
+                    "id": "185fb0fd-e25b-4f17-9faf-107c93555e5f",
+                    "path": "<HID::Bensussen Deutsch & Associates,Inc.(BDA) Core (Plus) Wired Controller>/button6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Joystick [Core (Plus)]",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "AD",
                     "id": "1c7587fb-14ec-48b1-9b11-d803c6264db3",
                     "path": "1DAxis",
@@ -532,6 +552,17 @@
                 },
                 {
                     "name": "",
+                    "id": "8adc3bc1-0809-4438-9c2b-20e32abeabd9",
+                    "path": "<Joystick>/stick/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Joystick [Core (Plus)]",
+                    "action": "Movement 2D",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d10d443d-5e12-4693-84e3-a523f1efa48c",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -584,6 +615,83 @@
                     "action": "Jump 2D",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d53540eb-1aa6-49ee-84aa-d27aae360297",
+                    "path": "<Pointer>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Dash Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5c20d773-1781-464c-aef5-88db61ea6796",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "StickDeadzone,NormalizeVector2",
+                    "groups": "Gamepad",
+                    "action": "Dash Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Right Stick",
+                    "id": "b5135921-9b1d-4530-bdb8-26fbf1ff730f",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "",
+                    "processors": "StickDeadzone,NormalizeVector2",
+                    "groups": "",
+                    "action": "Dash Direction",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "7f4d5f95-4cb0-4a2f-89b0-72556f699ef9",
+                    "path": "<HID::Bensussen Deutsch & Associates,Inc.(BDA) Core (Plus) Wired Controller>/rz",
+                    "interactions": "",
+                    "processors": "Invert,Clamp(max=1)",
+                    "groups": "Joystick [Core (Plus)]",
+                    "action": "Dash Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "a1825d87-3d57-43f5-b626-9021a9c3eac3",
+                    "path": "<HID::Bensussen Deutsch & Associates,Inc.(BDA) Core (Plus) Wired Controller>/rz",
+                    "interactions": "",
+                    "processors": "Clamp(max=1)",
+                    "groups": "Joystick [Core (Plus)]",
+                    "action": "Dash Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "e71ca06a-7800-4026-b4fb-83d047804acd",
+                    "path": "<HID::Bensussen Deutsch & Associates,Inc.(BDA) Core (Plus) Wired Controller>/z",
+                    "interactions": "",
+                    "processors": "Invert,Clamp(max=1)",
+                    "groups": "Joystick [Core (Plus)]",
+                    "action": "Dash Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "02c92512-1a61-4101-90b3-46209707a32d",
+                    "path": "<HID::Bensussen Deutsch & Associates,Inc.(BDA) Core (Plus) Wired Controller>/z",
+                    "interactions": "",
+                    "processors": "Clamp(max=1)",
+                    "groups": "Joystick [Core (Plus)]",
+                    "action": "Dash Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },
