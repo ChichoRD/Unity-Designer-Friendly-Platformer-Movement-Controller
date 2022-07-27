@@ -54,9 +54,9 @@ public struct Dasher2D
         int objectLayer = _rigidbody.gameObject.layer;
         int skipLayer = dashSkipLayers.FirstSetLayer();
 
-        Physics.IgnoreLayerCollision(objectLayer, skipLayer, true);
+        Physics2D.IgnoreLayerCollision(objectLayer, skipLayer, true);
         await Task.Delay((int)(dashSkipTime * MILISECONDS));
-        Physics.IgnoreLayerCollision(objectLayer, skipLayer, false);
+        Physics2D.IgnoreLayerCollision(objectLayer, skipLayer, false);
     }
 
     private async Task CooldownTask()
