@@ -47,6 +47,9 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
     public Action OnMovementInputStarted;
     public Action OnMovementInputEnded;
 
+    [SerializeField] private UnityEvent _onMovementInputStarted;
+    [SerializeField] private UnityEvent _onMovementInputEnded;
+
     protected TMovementDimension lastMovementInput;
     protected TMovementDimension movementInput;
     public abstract TMovementDimension MovementInput
@@ -183,6 +186,10 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
         //Accelerations
         OnMovementInputStarted += BeginAcceleration;
         OnMovementInputEnded += BeginDecceleration;
+
+        //Extra Events On Movement
+        OnMovementInputStarted += _onMovementInputStarted.Invoke;
+        OnMovementInputEnded += _onMovementInputEnded.Invoke;
 
         //First Person and Custom Transformation
         if (UseCustomTransformation)
@@ -405,6 +412,12 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
         return movement;
     }
 
+    protected virtual Vector3 GetMovementForce(Func<Vector2> finalMovementInput)
+    {
+        Vector3 movement = _customTransformation.MultiplyVector(finalMovementInput().SwapYZ()).NoY().normalized * currentMovementForce;
+        return movement;
+    }
+
     protected virtual Vector3 GetExtraGravityForce()
     {
         Vector3 extraGravityForce = -_extraGravityForce * groundDirection;
@@ -429,26 +442,28 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
 
             float delta = 1 / _raycastDensity;
 
-            Vector2 averageNormal = Vector3.zero;
+            Vector3 averageNormal = Vector3.zero;
             for (float i = 0; i <= _groundChecksExtents.x; i += delta)
             {
                 for (float j = 0; j <= _groundChecksExtents.y; j += delta)
                 {
                     Vector3 origin = _groundCheckCenter.position + new Vector3(i, 0, j) - (_groundChecksExtents / 2).SwapYZ();
 
-                    var hit = Physics2D.Raycast(origin, groundDirection, _raycastsLength, _jumpableLayers);
+                    var hit = GroundCheckHit(origin, groundDirection, _raycastsLength, _jumpableLayers, out Vector3 normal);
                     if (!hit) continue;
 
-                    averageNormal += hit.normal;
+                    averageNormal += normal;
                 }
             }
 
             averageNormal.Normalize();
 
             float angle = Vector3.Angle(jumpDirection, averageNormal);
-            OnGround = averageNormal != Vector2.zero && angle < _maxJumpAngle && VelocityY <= 0;
+            OnGround = averageNormal != Vector3.zero && angle < _maxJumpAngle && VelocityY <= 0;
         }
     }
+
+    protected abstract bool GroundCheckHit(Vector3 origin, Vector3 direction, float distance, LayerMask layerMask, out Vector3 normal);
 
     #endregion
 

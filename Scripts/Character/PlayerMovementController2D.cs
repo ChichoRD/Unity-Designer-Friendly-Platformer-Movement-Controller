@@ -95,4 +95,12 @@ public class PlayerMovementController2D : PlayerMovementController<float>
     protected override bool RigidbodyIsNull() => !TryGetComponent(out _rigidbody);
 
     protected override void SetMovementInput() => MovementInput = movementAction.action.ReadValue<float>();
+
+    protected override bool GroundCheckHit(Vector3 origin, Vector3 direction, float distance, LayerMask layerMask, out Vector3 normal)
+    {
+        var hit = Physics2D.Raycast(origin, direction, distance, layerMask);
+        normal = hit.normal;
+        return hit;
+    }
+
 }

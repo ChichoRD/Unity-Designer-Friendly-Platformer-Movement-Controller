@@ -16,8 +16,42 @@ public class PlayerMovementController3D : PlayerMovementController<Vector2>
 
         base.Awake();
     }
+    
+    protected override void Update()
+    {
+        base.Update();
+        StepCheck(finalMovementInput);
+    }
 
-    public override Vector2 MovementInput { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
+    private void FixedUpdate()
+    {
+        _rigidbody.AddForce(GetCounterMovementForce(), ForceMode.Force);
+        _movementAnimationUpdate.Invoke(GetRawMovement(finalMovementInput));
+        _rigidbody.AddForce(GetMovementForce(finalMovementInput), ForceMode.Force);
+        _rigidbody.AddForce(GetExtraGravityForce(), ForceMode.Force);
+    }
+
+    public override Vector2 MovementInput
+    {
+        get => movementInput;
+        protected set
+        {
+            float valueAbs = value.sqrMagnitude;
+            float movementInputAbs = movementInput.sqrMagnitude;
+            if (valueAbs > 0 && movementInputAbs <= 0)
+            {
+                OnMovementInputStarted?.Invoke();
+            }
+
+            if (movementInputAbs > 0 && valueAbs <= 0)
+            {
+                lastMovementInput = movementInput;
+                OnMovementInputEnded?.Invoke();
+            }
+
+            movementInput = value;
+        }
+    }
 
     public override void OnLandMovementBoost() => _rigidbody.AddForce(_customTransformation.MultiplyVector((landMovementBoost * currentMovementForce * Time.fixedDeltaTime * finalMovementInput()).SwapYZ()), ForceMode.Impulse);
 
@@ -83,5 +117,12 @@ public class PlayerMovementController3D : PlayerMovementController<Vector2>
     protected override void SetMovementInput()
     {
         MovementInput = movementAction.action.ReadValue<Vector2>();
+    }
+
+    protected override bool GroundCheckHit(Vector3 origin, Vector3 direction, float distance, LayerMask layerMask, out Vector3 normal)
+    {
+        var hit = Physics.Raycast(origin, direction, out RaycastHit hitInfo, distance, layerMask);
+        normal = hitInfo.normal;
+        return hit;
     }
 }
