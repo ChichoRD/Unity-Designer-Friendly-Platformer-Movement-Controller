@@ -20,7 +20,11 @@ public abstract class InputtedMovementController<T> : MovementController<T> wher
     {
         base.Awake();
 
-        //Jump Inputs
+        InitialiseJumpInputEvents();
+    }
+
+    private void InitialiseJumpInputEvents()
+    {
         if (_jumpAction != null)
         {
             _jumpAction.action.performed += OnJumpPerformed;
@@ -45,6 +49,11 @@ public abstract class InputtedMovementController<T> : MovementController<T> wher
     protected override void OnDestroy()
     {
         base.OnDestroy();
+        FinaliseJumpInputEvents();
+    }
+
+    private void FinaliseJumpInputEvents()
+    {
         if (_jumpAction != null)
         {
             _jumpAction.action.performed -= OnJumpPerformed;
@@ -54,12 +63,15 @@ public abstract class InputtedMovementController<T> : MovementController<T> wher
 
     #endregion
 
+    #region Loops
+    protected abstract void FixedUpdate();
+    #endregion
+
     #region Input Actions Enabling/Disabling
     private void EnableAllMovement()
     {
         EnablePlaneMovement();
         EnableJumpAction();
-        EnableDashDirectionAction();
     }
 
     
@@ -77,7 +89,6 @@ public abstract class InputtedMovementController<T> : MovementController<T> wher
     {
         DisablePlaneMovement();
         DisableJumpAction();
-        DisableDashDirectionAction();
     }
 
     private void DisablePlaneMovement()

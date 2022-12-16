@@ -19,7 +19,7 @@ public class InputtedMovementController2D : InputtedMovementController<float>
         StepCheck(finalMovementInput);
     }
 
-    private void FixedUpdate()
+    protected override void FixedUpdate()
     {
         _rigidbody.AddForce(GetCounterMovementForce(), ForceMode2D.Force);
         _movementAnimationUpdate.Invoke(GetRawMovement(finalMovementInput));
@@ -59,12 +59,6 @@ public class InputtedMovementController2D : InputtedMovementController<float>
     protected override Vector3 GetVelocity() => _rigidbody.velocity;
 
 #if ENABLE_INPUT_SYSTEM
-
-    protected override void OnDashPerformed(InputAction.CallbackContext obj)
-    {
-        Vector2 input = dashDirectionAction == null ? finalMovementInput() * Vector2.right : dashDirectionAction.action.ReadValue<Vector2>();
-        _dasher.Dash(_customTransformation.MultiplyVector(input));
-    }
     
     protected override void OnJumpCanceled(InputAction.CallbackContext obj)
     {

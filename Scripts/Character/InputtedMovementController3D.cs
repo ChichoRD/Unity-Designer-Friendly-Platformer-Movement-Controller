@@ -21,7 +21,7 @@ public class InputtedMovementController3D : InputtedMovementController<Vector2>
         StepCheck(finalMovementInput);
     }
 
-    private void FixedUpdate()
+    protected override void FixedUpdate()
     {
         _rigidbody.AddForce(GetCounterMovementForce(), ForceMode.Force);
         _movementAnimationUpdate.Invoke(GetRawMovement(finalMovementInput));
