@@ -1,20 +1,18 @@
 using ChichoExtensions;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class PlayerMovementController3D : PlayerMovementController<Vector2>
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
+public class InputtedMovementController3D : InputtedMovementController<Vector2>
 {
     private Rigidbody _rigidbody;
-    private Dasher3D _dasher;
 
     protected override void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
-
-        var temp = _dasher;
-        _dasher = new Dasher3D(temp, _rigidbody);
-
         base.Awake();
+        _rigidbody = GetComponent<Rigidbody>();
     }
     
     protected override void Update()
@@ -79,12 +77,8 @@ public class PlayerMovementController3D : PlayerMovementController<Vector2>
     {
         return _rigidbody.velocity;
     }
-
-    protected override void OnDashPerformed(InputAction.CallbackContext obj)
-    {
-        Vector3 input = dashDirectionAction == null ? finalMovementInput() : dashDirectionAction.action.ReadValue<Vector2>().SwapYZ();
-        _dasher.Dash(_customTransformation.MultiplyVector(input));
-    }
+    
+#if ENABLE_INPUT_SYSTEM
 
     protected override void OnJumpCanceled(InputAction.CallbackContext obj)
     {
@@ -109,6 +103,8 @@ public class PlayerMovementController3D : PlayerMovementController<Vector2>
         PerformJump();
     }
 
+#endif
+    
     protected override bool RigidbodyIsNull()
     {
         return !TryGetComponent(out _rigidbody);
@@ -116,7 +112,9 @@ public class PlayerMovementController3D : PlayerMovementController<Vector2>
 
     protected override void SetMovementInput()
     {
+#if ENABLE_INPUT_SYSTEM
         MovementInput = movementAction.action.ReadValue<Vector2>();
+#endif
     }
 
     protected override bool GroundCheckHit(Vector3 origin, Vector3 direction, float distance, LayerMask layerMask, out Vector3 normal)

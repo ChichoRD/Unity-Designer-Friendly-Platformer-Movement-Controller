@@ -3,7 +3,10 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+#endif
 
 public abstract class MovementController<TMovementDimension> : MonoBehaviour where TMovementDimension : struct
 {
@@ -191,6 +194,12 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
         OnMovementInputStarted += _onMovementInputStarted.Invoke;
         OnMovementInputEnded += _onMovementInputEnded.Invoke;
 
+        //Jump Count
+        ResetRemainingJumps();
+        OnLanded.AddListener(ResetRemainingJumps);
+        OnJump += DecreaseRemainingJumps;
+
+
         //First Person and Custom Transformation
         if (UseCustomTransformation)
         {
@@ -235,6 +244,9 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
 
         OnMovementInputStarted -= BeginAcceleration;
         OnMovementInputEnded -= BeginDecceleration;
+
+        OnLanded.RemoveListener(ResetRemainingJumps);
+        OnJump -= DecreaseRemainingJumps;
 
         void AnimatorEventsUnset()
         {
@@ -468,7 +480,9 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
     #endregion
 
     #region Jump Functions
+#if ENABLE_INPUT_SYSTEM
     protected abstract void OnJumpPerformed(InputAction.CallbackContext obj);
+#endif
 
     protected IEnumerator JumpBufferTimeRoutine()
     {
@@ -503,7 +517,9 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
         _jumpTimeRoutine = null;
     }
 
+#if ENABLE_INPUT_SYSTEM
     protected abstract void OnJumpCanceled(InputAction.CallbackContext obj);
+#endif
 
     protected void JumpKill(Action<float> onForceAdd)
     {
@@ -636,8 +652,6 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
     private void ApplyFallGravity() => _extraGravityForce = _fallExtraGravityMultiplier * _defaultExtraGravityForce;
 
     public abstract void OnLandMovementBoost();
-
-    protected abstract void OnDashPerformed(InputAction.CallbackContext obj);
 
     protected void TransformationToCustomFoward() => _transformationAssignment = () => _customTransformation = new Matrix4x4(_customTransformator.right, _customTransformator.up, _customTransformator.forward, new Vector4(0, 0, 0, 1));
 

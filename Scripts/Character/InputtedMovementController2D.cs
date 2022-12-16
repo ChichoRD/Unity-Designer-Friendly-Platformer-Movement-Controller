@@ -1,19 +1,16 @@
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+#endif
 
-public class PlayerMovementController2D : PlayerMovementController<float>
+public class InputtedMovementController2D : InputtedMovementController<float>
 {
     private Rigidbody2D _rigidbody;
-    [SerializeField] private Dasher2D _dasher;
 
     protected override void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody2D>();
-
-        var temp = _dasher;
-        _dasher = new Dasher2D(temp, _rigidbody);
-
         base.Awake();
+        _rigidbody = GetComponent<Rigidbody2D>();
     }
 
     protected override void Update()
@@ -61,12 +58,14 @@ public class PlayerMovementController2D : PlayerMovementController<float>
 
     protected override Vector3 GetVelocity() => _rigidbody.velocity;
 
+#if ENABLE_INPUT_SYSTEM
+
     protected override void OnDashPerformed(InputAction.CallbackContext obj)
     {
         Vector2 input = dashDirectionAction == null ? finalMovementInput() * Vector2.right : dashDirectionAction.action.ReadValue<Vector2>();
         _dasher.Dash(_customTransformation.MultiplyVector(input));
     }
-
+    
     protected override void OnJumpCanceled(InputAction.CallbackContext obj)
     {
         JumpKill(OnForceAdd);
@@ -89,12 +88,19 @@ public class PlayerMovementController2D : PlayerMovementController<float>
 
         PerformJump();
     }
+    
+#endif
 
     protected override void ApplyJumpForce() => _rigidbody.AddForce(maxJumpImpulse * jumpDirection, ForceMode2D.Impulse);
 
     protected override bool RigidbodyIsNull() => !TryGetComponent(out _rigidbody);
 
-    protected override void SetMovementInput() => MovementInput = movementAction.action.ReadValue<float>();
+    protected override void SetMovementInput()
+    {
+#if ENABLE_INPUT_SYSTEM
+        MovementInput = movementAction.action.ReadValue<float>();
+#endif
+    }
 
     protected override bool GroundCheckHit(Vector3 origin, Vector3 direction, float distance, LayerMask layerMask, out Vector3 normal)
     {

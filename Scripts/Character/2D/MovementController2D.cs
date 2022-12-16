@@ -3,11 +3,17 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
+[Obsolete("Use the new InputtedMovementController2D instead")]
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovementController2D : MonoBehaviour
 {
+#if ENABLE_INPUT_SYSTEM
+
     #region Input
     [Header("Input")]
     [SerializeField] private InputActionReference _movementAction;
@@ -775,5 +781,8 @@ public class MovementController2D : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement, _jumpDirection), _rotationSpeed);
     }
 
-    #endregion   
+    #endregion
+
+#endif
+
 }

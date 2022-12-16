@@ -1,14 +1,17 @@
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+#endif
 
-public abstract class PlayerMovementController<T> : MovementController<T> where T : struct
+public abstract class InputtedMovementController<T> : MovementController<T> where T : struct
 {
+#if ENABLE_INPUT_SYSTEM
+
     #region Input
+
     [Header("Input")]
     [SerializeField] protected InputActionReference movementAction;
     [SerializeField] private InputActionReference _jumpAction;
-    [SerializeField] private InputActionReference _dashAction;
-    [SerializeField] protected InputActionReference dashDirectionAction;
 
     #endregion
 
@@ -22,16 +25,6 @@ public abstract class PlayerMovementController<T> : MovementController<T> where 
         {
             _jumpAction.action.performed += OnJumpPerformed;
             _jumpAction.action.canceled += OnJumpCanceled;
-
-            ResetRemainingJumps();
-            OnLanded.AddListener(ResetRemainingJumps);
-            OnJump += DecreaseRemainingJumps;
-        }
-
-        //Dash Inputs
-        if (_dashAction != null)
-        {
-            _dashAction.action.performed += OnDashPerformed;
         }
     }
 
@@ -52,19 +45,10 @@ public abstract class PlayerMovementController<T> : MovementController<T> where 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-
         if (_jumpAction != null)
         {
             _jumpAction.action.performed -= OnJumpPerformed;
             _jumpAction.action.canceled -= OnJumpCanceled;
-
-            OnLanded.RemoveListener(ResetRemainingJumps);
-            OnJump -= DecreaseRemainingJumps;
-        }
-
-        if (_dashAction != null)
-        {
-            _dashAction.action.performed -= OnDashPerformed;
         }
     }
 
@@ -75,18 +59,13 @@ public abstract class PlayerMovementController<T> : MovementController<T> where 
     {
         EnablePlaneMovement();
         EnableJumpAction();
-        EnableDashAction();
         EnableDashDirectionAction();
     }
 
+    
     private void EnablePlaneMovement()
     {
         movementAction.action.Enable();
-    }
-
-    public void EnableDashAction()
-    {
-        _dashAction.action.Enable();
     }
 
     public void EnableJumpAction()
@@ -94,16 +73,10 @@ public abstract class PlayerMovementController<T> : MovementController<T> where 
         _jumpAction.action.Enable();
     }
 
-    private void EnableDashDirectionAction()
-    {
-        dashDirectionAction.action.Enable();
-    }
-
     private void DisableAllMovement()
     {
         DisablePlaneMovement();
         DisableJumpAction();
-        DisableDashAction();
         DisableDashDirectionAction();
     }
 
@@ -117,15 +90,7 @@ public abstract class PlayerMovementController<T> : MovementController<T> where 
         _jumpAction.action.Disable();
     }
 
-    public void DisableDashAction()
-    {
-        _dashAction.action.Disable();
-    }
-
-    private void DisableDashDirectionAction()
-    {
-        dashDirectionAction.action.Disable();
-    }
-
     #endregion
+    
+#endif
 }

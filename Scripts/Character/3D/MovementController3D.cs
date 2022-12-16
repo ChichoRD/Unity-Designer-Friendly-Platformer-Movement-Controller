@@ -3,18 +3,24 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
+[Obsolete("Use the new InputtedMovementController3D instead")]
 [RequireComponent(typeof(Rigidbody))]
 public class MovementController3D : MonoBehaviour
 {
+#if ENABLE_INPUT_SYSTEM
+
     #region Input
+
     [Header("Input")]
     [SerializeField] private InputActionReference _movementAction;
     [SerializeField] private InputActionReference _jumpAction;
     [SerializeField] private InputActionReference _dashAction;
     [SerializeField] private InputActionReference _dashDirectionAction;
-
     #endregion
 
     #region Movement
@@ -45,7 +51,7 @@ public class MovementController3D : MonoBehaviour
     [SerializeField][Min(0)] private float _maxMovementForce;
     public float MaxMovementSpeed { get => _maxMovementSpeed; set => _maxMovementSpeed = value; }
     private float _currentMovementForce;
-    
+
     [Space]
     [SerializeField][Range(0f, 1f)] private float _counterMovementFactor = 0.05f;
     [SerializeField][Min(0)] private float _maxMovementSpeed = 12.08f;
@@ -95,7 +101,7 @@ public class MovementController3D : MonoBehaviour
     [SerializeField][Min(0)] private int _defaultJumpsAmount = 1;
     public int JumpsRemaining { get; set; }
 
-    
+
     [Space]
     [SerializeField] private Transform _minStepHeightCheck;
     [SerializeField][Min(0)] private float _maxStepHeight = 0.6f;
@@ -124,7 +130,7 @@ public class MovementController3D : MonoBehaviour
     [SerializeField][Min(0)] private float _maxJumpTime = 1f;
     [SerializeField][Min(0)] private float _minJumpHeight = 2f;
     [SerializeField][Min(0)] private float _minDescentTime = 1f;
-    
+
     private float _jumpTimeElapsed;
     private Coroutine _jumpTimeRoutine;
     private Vector3 _jumpDirection = Vector3.up;
@@ -222,13 +228,13 @@ public class MovementController3D : MonoBehaviour
         //Extra Fall Gravity
         OnDescentStarted += ApplyFallGravity;
         OnLanded.AddListener(ResetExtraGravity);
-        
+
         //Coyote Time
         OnLeftGround.AddListener(OnLeftGroundCoyoteTime);
 
         //Jump Buffer
         OnLanded.AddListener(BufferedJump);
-        
+
         //Animation Events Triggering Sources
         AnimationEvents();
 
@@ -240,7 +246,7 @@ public class MovementController3D : MonoBehaviour
             Cursor.visible = false;
             return;
         }
-        
+
         TransformationToWorldDefault();
 
         void AnimationEvents()
@@ -270,7 +276,7 @@ public class MovementController3D : MonoBehaviour
     {
         DisableAllMovement();
     }
-    
+
     private void OnDestroy()
     {
         OnMovementInputStarted -= AssignMovementInputToCurrent;
@@ -523,7 +529,7 @@ public class MovementController3D : MonoBehaviour
 
             addedAcceleration = Physics.gravity.y + _defaultExtraGravityForce * _fallExtraGravityMultiplier / _rigidbody.mass;
             acceleration = new Vector3(0, addedAcceleration);
-            
+
             float descentTime = Mathf.Sqrt(-2 * _maxJumpHeight / addedAcceleration);
 
             for (float t = 0; t < descentTime; t += dt)
@@ -543,7 +549,7 @@ public class MovementController3D : MonoBehaviour
     private void OnJumpPerformed(InputAction.CallbackContext obj)
     {
         if (!obj.ReadValueAsButton()) return;
-        
+
         if (JumpsRemaining <= 0 && _coyoteTimeRoutine == null)
         {
             _jumpBufferTimeRoutine ??= StartCoroutine(JumpBufferTimeRoutine());
@@ -594,7 +600,7 @@ public class MovementController3D : MonoBehaviour
     private void JumpKill()
     {
         if (OnGround || VelocityY <= 0) return;
-        
+
         StartCoroutine(JumpKillRoutine());
 
         IEnumerator JumpKillRoutine()
@@ -772,5 +778,8 @@ public class MovementController3D : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement, _jumpDirection), _rotationSpeed);
     }
 
-    #endregion   
+    #endregion
+
+#endif
+
 }
