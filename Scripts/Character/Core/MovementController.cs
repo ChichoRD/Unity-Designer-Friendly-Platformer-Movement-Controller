@@ -76,6 +76,7 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
     public int JumpsRemaining { get; set; }
 
     [Space]
+    protected Action<Func<TMovementDimension>> stepCheck;
     [SerializeField] private Transform _minStepHeightCheck;
     [SerializeField][Min(0)] private float _maxStepHeight = 0.6f;
     [SerializeField][Min(0)] private float _maxStepDistance = 0.5f;
@@ -153,23 +154,19 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
     #endregion
 
     #region Animation
-    [Header("Animation")]
-    [SerializeField][Range(0f, 1f)] private float _rotationSpeed = 0f;
-    [SerializeField] private string _movementVelocityYParameter = "MovementVelocityY";
-    [SerializeField] private string _movementVelocityXParameter = "MovementVelocityX";
-    [SerializeField] private string _movementVelocityMagnitudeParameter = "MovementSpeed";
-    [SerializeField] private string _onJumpParameter = "OnJump";
-    [SerializeField] private string _onLandParameter = "OnLand";
-    protected Animator _animator;
-    protected Action<Vector2> _movementAnimationUpdate;
-
+    
+    protected Action<Vector3> _movementAnimationUpdate;
+    public Quaternion AnimationMovementLookRotation { get; protected set; }
+    public float AnimationVelocityX { get; protected set; }
+    public float AnimationVelocityY { get; protected set; }
+    public float AnimationVelocityMagnitude { get; protected set; }
+    
     #endregion
-
+    
     #region Initialization
     protected virtual void Awake()
     {
         //Animation Events
-        _animator = GetComponent<Animator>();
         AnimationEventsSet();
 
         //Extra Fall Gravity
@@ -199,6 +196,8 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
         OnLanded.AddListener(ResetRemainingJumps);
         OnJump += DecreaseRemainingJumps;
 
+        //Step Check
+        stepCheck = _minStepHeightCheck == null ? _ => { } : null;
 
         //First Person and Custom Transformation
         if (UseCustomTransformation)
@@ -213,15 +212,8 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
 
         void AnimationEventsSet()
         {
-            if (_animator == null)
-            {
-                _movementAnimationUpdate = _ => { };
-                return;
-            }
-
-            _movementAnimationUpdate += AnimatorMovementSet;
-            OnLeftGround.AddListener(AnimatorJumpSet);
-            OnLanded.AddListener(AnimatorLandSet);
+            _movementAnimationUpdate += AnimationMovementSet;
+            _movementAnimationUpdate += AnimationRotationSet;
         }
     }
 
@@ -250,11 +242,8 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
 
         void AnimatorEventsUnset()
         {
-            if (_animator == null) return;
-
-            _movementAnimationUpdate -= AnimatorMovementSet;
-            OnLeftGround.RemoveListener(AnimatorJumpSet);
-            OnLanded.RemoveListener(AnimatorLandSet);
+            _movementAnimationUpdate -= AnimationMovementSet;
+            _movementAnimationUpdate -= AnimationRotationSet;
         }
     }
 
@@ -696,20 +685,18 @@ public abstract class MovementController<TMovementDimension> : MonoBehaviour whe
     #endregion
 
     #region Animation Logic
-    public void AnimatorJumpSet() => _animator.SetTrigger(_onJumpParameter);
-    public void AnimatorLandSet() => _animator.SetTrigger(_onLandParameter);
-    public void AnimatorMovementSet(Vector2 movement)
+    public void AnimationMovementSet(Vector3 movement)
     {
-        _animator.SetFloat(_movementVelocityXParameter, movement.x);
-        _animator.SetFloat(_movementVelocityYParameter, movement.y);
-        _animator.SetFloat(_movementVelocityMagnitudeParameter, movement.sqrMagnitude);
+        AnimationVelocityX = movement.x;
+        AnimationVelocityY = movement.y;
+        AnimationVelocityMagnitude = movement.magnitude;
     }
 
-    protected void RoationSet(Vector3 movement)
+    protected void AnimationRotationSet(Vector3 movement)
     {
         const float THRESHOLD = 0.1f;
         if (movement.sqrMagnitude < THRESHOLD) return;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement, jumpDirection), _rotationSpeed);
+        AnimationMovementLookRotation = Quaternion.LookRotation(movement, jumpDirection);
     }
 
     #endregion   

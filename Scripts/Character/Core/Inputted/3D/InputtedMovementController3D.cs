@@ -13,12 +13,13 @@ public class InputtedMovementController3D : InputtedMovementController<Vector2>
     {
         base.Awake();
         _rigidbody = GetComponent<Rigidbody>();
+        stepCheck ??= StepCheck;
     }
-    
+
     protected override void Update()
     {
         base.Update();
-        StepCheck(finalMovementInput);
+        stepCheck(finalMovementInput);
     }
 
     protected override void FixedUpdate()

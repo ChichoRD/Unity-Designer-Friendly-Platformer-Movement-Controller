@@ -11,12 +11,13 @@ public class InputtedMovementController2D : InputtedMovementController<float>
     {
         base.Awake();
         _rigidbody = GetComponent<Rigidbody2D>();
+        stepCheck ??= StepCheck;
     }
 
     protected override void Update()
     {
         base.Update();
-        StepCheck(finalMovementInput);
+        stepCheck(finalMovementInput);
     }
 
     protected override void FixedUpdate()

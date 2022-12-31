@@ -6,10 +6,10 @@ Preset:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Super Mario
+  m_Name: Super Meat Boy
   m_TargetType:
     m_NativeTypeID: 114
-    m_ManagedTypePPtr: {fileID: 11500000, guid: c05f8a1930564544a8d8eff67bacbfee, type: 3}
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 430608b6ec12d594887405fb68cf3313, type: 3}
     m_ManagedTypeFallback: 
   m_Properties:
   - target: {fileID: 0}
@@ -25,32 +25,8 @@ Preset:
     value: 
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _movementAction
-    value: 
-    objectReference: {fileID: -5613836590169979835, guid: 025ffc9bba52ac642978e1e365f3273a, type: 3}
-  - target: {fileID: 0}
-    propertyPath: _jumpAction
-    value: 
-    objectReference: {fileID: -6879623806351252960, guid: 025ffc9bba52ac642978e1e365f3273a, type: 3}
-  - target: {fileID: 0}
-    propertyPath: _dashAction
-    value: 
-    objectReference: {fileID: 6839635208545876723, guid: 025ffc9bba52ac642978e1e365f3273a, type: 3}
-  - target: {fileID: 0}
-    propertyPath: _dashDirectionAction
-    value: 
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _customTransformator
-    value: 
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _useCustomTransformation
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: _accelerationTime
-    value: 1.2
+    value: 0.48
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationCurve.m_Curve.Array.size
@@ -133,28 +109,8 @@ Preset:
     value: 4
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _dasher.OnDash.m_PersistentCalls.m_Calls.Array.size
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _dasher.dashImpulse
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _dasher.dashSkipTime
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _dasher.dashSkipLayers.m_Bits
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _dasher._coolDownTime
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: _deccelerationTime
-    value: 0.6
+    value: 0.06
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationCurve.m_Curve.Array.size
@@ -202,11 +158,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationCurve.m_Curve.Array.data[1].inSlope
-    value: -0
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationCurve.m_Curve.Array.data[1].outSlope
-    value: -0
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationCurve.m_Curve.Array.data[1].tangentMode
@@ -237,20 +193,32 @@ Preset:
     value: 4
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _landMovementBoost
-    value: 8
+    propertyPath: _maxMovementForce
+    value: 71.82001
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _maxMovementForce
-    value: 75
+    propertyPath: _maxMovementSpeed
+    value: 7.182
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _counterMovementFactor
     value: 0.2
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _maxMovementSpeed
-    value: 7.5
+    propertyPath: _customTransformator
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _useCustomTransformation
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _onMovementInputStarted.m_PersistentCalls.m_Calls.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _onMovementInputEnded.m_PersistentCalls.m_Calls.Array.size
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _groundChecksExtents.x
@@ -278,7 +246,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _maxJumpAngle
-    value: 45
+    value: 60
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _defaultJumpsAmount
@@ -309,20 +277,20 @@ Preset:
     value: 85
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _maxJumpImpulse
-    value: 12
+    propertyPath: maxJumpImpulse
+    value: 18.518518
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _minJumpTime
-    value: 0.13333333
+    value: 0.015999997
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _defaultExtraGravityForce
-    value: -7.3328567
+    value: -24.483551
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _fallExtraGravityMultiplier
-    value: 5.8217416
+    value: 0.67171615
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _jumpKillDelay
@@ -330,11 +298,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _coyoteTime
-    value: 0.1
+    value: 0.35
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _jumpBufferTime
     value: 0.35
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: landMovementBoost
+    value: 8
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _adjustAllJumpParameters
@@ -342,11 +314,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _maxJumpHeight
-    value: 4.2
+    value: 5
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _maxJumpTime
-    value: 0.7
+    value: 0.54
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _minJumpHeight
@@ -354,7 +326,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _minDescentTime
-    value: 0.4
+    value: 0.6171429
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: <OnLanded>k__BackingField.m_PersistentCalls.m_Calls.Array.size
@@ -365,27 +337,11 @@ Preset:
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _rotationSpeed
-    value: 0
+    propertyPath: movementAction
+    value: 
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _movementVelocityYParameter
-    value: MovementVelocityY
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _movementVelocityXParameter
-    value: MovementVelocityX
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _movementVelocityMagnitudeParameter
-    value: MovementSpeed
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _onJumpParameter
-    value: OnJump
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _onLandParameter
-    value: OnLand
+    propertyPath: _jumpAction
+    value: 
     objectReference: {fileID: 0}
   m_ExcludedProperties: []

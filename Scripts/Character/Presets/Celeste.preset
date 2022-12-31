@@ -6,10 +6,10 @@ Preset:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hollow Knight
+  m_Name: Celeste
   m_TargetType:
     m_NativeTypeID: 114
-    m_ManagedTypePPtr: {fileID: 11500000, guid: c05f8a1930564544a8d8eff67bacbfee, type: 3}
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 430608b6ec12d594887405fb68cf3313, type: 3}
     m_ManagedTypeFallback: 
   m_Properties:
   - target: {fileID: 0}
@@ -25,28 +25,8 @@ Preset:
     value: 
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _movementAction
-    value: 
-    objectReference: {fileID: -5613836590169979835, guid: 025ffc9bba52ac642978e1e365f3273a, type: 3}
-  - target: {fileID: 0}
-    propertyPath: _jumpAction
-    value: 
-    objectReference: {fileID: -6879623806351252960, guid: 025ffc9bba52ac642978e1e365f3273a, type: 3}
-  - target: {fileID: 0}
-    propertyPath: _dashAction
-    value: 
-    objectReference: {fileID: 6839635208545876723, guid: 025ffc9bba52ac642978e1e365f3273a, type: 3}
-  - target: {fileID: 0}
-    propertyPath: _customTransformator
-    value: 
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _useCustomTransformation
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: _accelerationTime
-    value: 0.02
+    value: 0.12
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationCurve.m_Curve.Array.size
@@ -62,11 +42,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationCurve.m_Curve.Array.data[0].inSlope
-    value: 2
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationCurve.m_Curve.Array.data[0].outSlope
-    value: 2
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationCurve.m_Curve.Array.data[0].tangentMode
@@ -94,11 +74,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationCurve.m_Curve.Array.data[1].inSlope
-    value: -0.97681266
+    value: 2
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationCurve.m_Curve.Array.data[1].outSlope
-    value: -0.97681266
+    value: 2
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationCurve.m_Curve.Array.data[1].tangentMode
@@ -110,7 +90,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationCurve.m_Curve.Array.data[1].inWeight
-    value: 0.10215706
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _accelerationCurve.m_Curve.Array.data[1].outWeight
@@ -129,28 +109,8 @@ Preset:
     value: 4
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _dasher.OnDash.m_PersistentCalls.m_Calls.Array.size
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _dasher.dashImpulse
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _dasher.dashSkipTime
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _dasher.dashSkipLayers.m_Bits
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _dasher._coolDownTime
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: _deccelerationTime
-    value: 0.02
+    value: 0.06
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationCurve.m_Curve.Array.size
@@ -198,11 +158,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationCurve.m_Curve.Array.data[1].inSlope
-    value: 0.92957115
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationCurve.m_Curve.Array.data[1].outSlope
-    value: 0.92957115
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationCurve.m_Curve.Array.data[1].tangentMode
@@ -214,7 +174,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationCurve.m_Curve.Array.data[1].inWeight
-    value: 0.10798144
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _deccelerationCurve.m_Curve.Array.data[1].outWeight
@@ -233,20 +193,32 @@ Preset:
     value: 4
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _landMovementBoost
-    value: 8
+    propertyPath: _maxMovementForce
+    value: 47.88
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _maxMovementForce
-    value: 92.71524
+    propertyPath: _maxMovementSpeed
+    value: 4.788
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _counterMovementFactor
     value: 0.2
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _maxMovementSpeed
-    value: 8
+    propertyPath: _customTransformator
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _useCustomTransformation
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _onMovementInputStarted.m_PersistentCalls.m_Calls.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _onMovementInputEnded.m_PersistentCalls.m_Calls.Array.size
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _groundChecksExtents.x
@@ -274,7 +246,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _maxJumpAngle
-    value: 45
+    value: 60
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _defaultJumpsAmount
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _minStepHeightCheck
@@ -301,8 +277,8 @@ Preset:
     value: 85
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _maxJumpImpulse
-    value: 18.958332
+    propertyPath: maxJumpImpulse
+    value: 15
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _minJumpTime
@@ -310,11 +286,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _defaultExtraGravityForce
-    value: -21.78722
+    value: -31.856667
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _fallExtraGravityMultiplier
-    value: 2.81283
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _jumpKillDelay
@@ -329,24 +305,28 @@ Preset:
     value: 0.35
     objectReference: {fileID: 0}
   - target: {fileID: 0}
+    propertyPath: landMovementBoost
+    value: 8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: _adjustAllJumpParameters
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _maxJumpHeight
-    value: 5.6875
+    value: 2.7
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _maxJumpTime
-    value: 0.6
+    value: 0.36
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _minJumpHeight
-    value: 1.75
+    value: 1.35
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: _minDescentTime
-    value: 0.4
+    value: 0.36
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: <OnLanded>k__BackingField.m_PersistentCalls.m_Calls.Array.size
@@ -357,27 +337,11 @@ Preset:
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _rotationSpeed
-    value: 0
+    propertyPath: movementAction
+    value: 
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: _movementVelocityYParameter
-    value: MovementVelocityY
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _movementVelocityXParameter
-    value: MovementVelocityX
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _movementVelocityMagnitudeParameter
-    value: MovementSpeed
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _onJumpParameter
-    value: OnJump
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: _onLandParameter
-    value: OnLand
+    propertyPath: _jumpAction
+    value: 
     objectReference: {fileID: 0}
   m_ExcludedProperties: []
