@@ -1,0 +1,54 @@
+{
+    "name": "Sample Input Actions",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "eafd580c-4f64-43e8-a7f9-d48466972923",
+            "actions": [
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "6aeb3715-ec20-4f1a-b5a5-8b75c7141326",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Jump Cancel",
+                    "type": "Button",
+                    "id": "b59e5c66-f47a-4d36-9254-f5c8b38437f9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=1)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f02ba6bb-df06-4a24-85c6-bba6f0480e11",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd9389cb-731a-4f96-897f-bb3b5ec44be1",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
