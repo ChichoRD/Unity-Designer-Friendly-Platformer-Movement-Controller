@@ -36,4 +36,12 @@ public class PlatformerSetHandler : MonoBehaviour, IJumpSetHandler, IMovementSet
     {
         JumpSetHandler.ApplyGravitationalForces();
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (JumpSetHandler == null || JumpInputter == null) return;
+
+        JumpInputter.JumpController.DebugJumpArcs(Color.green, Color.blue, () => Vector3.right * MovementInputter.MovementController.MaxMovementSpeed);
+        JumpInputter.JumpController.DebugJumpHeights(Color.green, Color.blue);
+    }
 }

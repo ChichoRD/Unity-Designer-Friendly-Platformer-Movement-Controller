@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
-[RequireComponent(typeof(JumpController))]
+//[RequireComponent(typeof(JumpController))]
 public class ConstrainedJumpController : MonoBehaviour, IConstrainedJumpController
 {
     [RequireInterface(typeof(IJumpController))]

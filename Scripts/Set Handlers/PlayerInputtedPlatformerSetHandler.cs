@@ -65,12 +65,6 @@ public class PlayerInputtedPlatformerSetHandler : MonoBehaviour, IJumpSetHandler
         ApplyMovementForces();
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        JumpInputter.JumpController.DebugJumpArcs(Color.green, Color.blue, () => Vector3.right * MovementInputter.MovementController.MaxMovementSpeed);
-        JumpInputter.JumpController.DebugJumpHeights(Color.green, Color.blue);
-    }
-
     private void Jump(InputAction.CallbackContext obj)
     {
         JumpInputter.Jump();

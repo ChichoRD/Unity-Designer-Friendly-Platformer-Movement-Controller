@@ -8,6 +8,7 @@ public class EarlyJumpConstrainer : MonoBehaviour, IJumpConstrainer
     private bool _inEarlyJump;
     private IJumpController _jumpController;
     
+    public bool HasJumpController => _jumpController != null;
     public Func<Vector3> GetGroundDirection => _jumpController.GetGroundDirection;
     public Func<Vector3> GetJumpDirection => _jumpController.GetJumpDirection;
     [field: SerializeField] public UnityEvent OnJumpAbilityRestored { get; private set; }

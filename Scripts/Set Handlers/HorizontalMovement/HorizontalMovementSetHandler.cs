@@ -11,6 +11,8 @@ public abstract class HorizontalMovementSetHandler : MonoBehaviour, IMovementSet
 
     protected virtual void OnValidate()
     {
+        if (MovementInputter == null) return;
+
         InitialiseMovementController();
     }
 }

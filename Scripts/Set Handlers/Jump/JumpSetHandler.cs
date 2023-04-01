@@ -11,6 +11,7 @@ public abstract class JumpSetHandler : MonoBehaviour, IJumpSetHandler
 
     protected virtual void OnValidate()
     {
+        if (JumpInputter == null) return;
         InitialiseJumpController();
     }
 }

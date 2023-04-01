@@ -105,7 +105,7 @@ public abstract class RaycastCheckJumpConstrainer : MonoBehaviour, IUpdateableJu
 
     public void GenerateRayField(Func<Ray, bool> onRayShortcircuit)
     {
-        if (_groundCheckCentre == null || GetGroundDirection == null) return;
+        if (!_earlyJumpConstrainer.HasJumpController || _groundCheckCentre == null || GetGroundDirection == null) return;
 
         Vector3 centre = _groundCheckCentre.position;
         Vector2 halfSize = _groundCheckAreaSize / 2f;

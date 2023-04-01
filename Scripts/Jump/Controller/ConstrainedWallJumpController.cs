@@ -3,11 +3,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
-[RequireComponent(typeof(IRaycastCheckJumpConstrainer))]
+//[RequireComponent(typeof(IRaycastCheckJumpConstrainer))]
 public class ConstrainedWallJumpController : MonoBehaviour, IConstrainedJumpController
 {
     [SerializeField][Min(0)] private float _wallJumpSpeed;
-    //[SerializeField][Range(0f, 90f)] private float _minWallJumpAngle = 60f;
 
     [RequireInterface(typeof(IJumpController))]
     [SerializeField] private Object _jumpControllerObject;
