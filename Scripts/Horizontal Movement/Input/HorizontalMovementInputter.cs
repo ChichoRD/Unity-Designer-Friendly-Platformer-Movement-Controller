@@ -15,6 +15,8 @@ public abstract class HorizontalMovementInputter : MonoBehaviour
         get => _movementInput;
         set
         {
+            OnMovementInputSet?.Invoke(value);
+
             if (HasInputAppeared(_movementInput, value))
                 OnMovementInputAppeared?.Invoke();
 
@@ -27,6 +29,7 @@ public abstract class HorizontalMovementInputter : MonoBehaviour
 
     [field: SerializeField] public UnityEvent OnMovementInputAppeared { get; private set; }
     [field: SerializeField] public UnityEvent OnMovementInputVanished { get; private set; }
+    [field: SerializeField] public UnityEvent<Vector2> OnMovementInputSet { get; private set; }
 
     protected float InputThreshold { get => _inputThreshold; }
     public HorizontalMovementController MovementController { get => _movementController; }

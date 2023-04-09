@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -47,9 +49,9 @@ public class JumpController : MonoBehaviour, IJumpController
     public Func<float> GetMass { get; private set; }
     public Action<Vector3> OnForceAdd { get; private set; }
 
-    protected float MaxJumpHeight => _maxJumpHeight;
-    protected float MaxJumpTime => _maxJumpTime;
-    protected float MinJumpHeight => _minJumpHeight;
+    public float MaxJumpHeight => _maxJumpHeight;
+    public float MaxJumpTime => _maxJumpTime;
+    public float MinJumpHeight => _minJumpHeight;
     protected float DescentTimeFromPeak => _descentTimeFromPeak;
     protected bool Descending => LastYVelocity < 0;
     protected bool Ascending => LastYVelocity > 0;
@@ -237,13 +239,25 @@ public class JumpController : MonoBehaviour, IJumpController
         DebugJumpArc(minJumpHeightColor, _minJumpHeight, _minJumpTime + _jumpKillDelay, getHorizontalVelocity);
     }
 
-    private void DebugJumpArc(Color arcColor, float peakHeight, float jumpTime, Func<Vector3> getHorizontalVelocity)
+    public Vector3 GetLandingPosition(float peakHeight, float jumpTime, Func<Vector3> getHorizontalVelocity)
     {
-        if (_jumpHeightsDebugger == null || GetJumpDirection == null) return;
+        if (_jumpHeightsDebugger == null || GetJumpDirection == null) return Vector3.zero;
 
-        Vector3 initialPosition = _jumpHeightsDebugger.position;
-        Vector3 previousPosition;
+        Vector3 initialVelocity = GetJumpSpeed(peakHeight, jumpTime) * GetJumpDirection() + getHorizontalVelocity();
+        Vector3 descentAcceleration = GetJumpAcceleration(peakHeight, jumpTime) * GetJumpDirection() * _fallGravityMultiplier;
+
+        float timeToPeak = GetJumpPeakReachTimeDueToVelocity(peakHeight, Vector3.Dot(initialVelocity, GetJumpDirection()));
+        float timeToDescendFromPeak = GetJumpPeakReachTimeDueToAcceleration(peakHeight, Vector3.Dot(descentAcceleration, GetJumpDirection()));
+
+        return _jumpHeightsDebugger.position + getHorizontalVelocity() * (timeToPeak + timeToDescendFromPeak);
+    }
+
+    public List<Vector3> SamplePointsAlongJumpArc(Vector3 initialPosition, float peakHeight, float jumpTime, Func<Vector3> getHorizontalVelocity, float dtFactor = 1)
+    {
+        if (GetJumpDirection == null) return Enumerable.Empty<Vector3>().ToList();
+
         Vector3 currentPosition = initialPosition;
+        List<Vector3> points = new List<Vector3>() { currentPosition };
 
         Vector3 initialVelocity = GetJumpSpeed(peakHeight, jumpTime) * GetJumpDirection() + getHorizontalVelocity();
         Vector3 currentVelocity = initialVelocity;
@@ -252,7 +266,7 @@ public class JumpController : MonoBehaviour, IJumpController
         Vector3 currentAcceleration = initialAcceleration;
 
         float timeToPeak = GetJumpPeakReachTimeDueToVelocity(peakHeight, Vector3.Dot(initialVelocity, GetJumpDirection()));
-        float dt = Time.fixedDeltaTime;
+        float dt = Time.fixedDeltaTime * dtFactor;
         const int MAX_ITERATIONS = 1000;
         int i = 0;
 
@@ -265,11 +279,10 @@ public class JumpController : MonoBehaviour, IJumpController
             }
 
             //Verlet
-            previousPosition = currentPosition;
             currentPosition += currentVelocity * dt + 0.5f * dt * dt * currentAcceleration;
             currentVelocity += currentAcceleration * dt;
 
-            Debug.DrawLine(previousPosition, currentPosition, arcColor);
+            points.Add(currentPosition);
         }
 
         currentAcceleration *= _fallGravityMultiplier;
@@ -284,11 +297,26 @@ public class JumpController : MonoBehaviour, IJumpController
             }
 
             //Verlet
-            previousPosition = currentPosition;
             currentPosition += currentVelocity * dt + 0.5f * dt * dt * currentAcceleration;
             currentVelocity += currentAcceleration * dt;
 
-            Debug.DrawLine(previousPosition, currentPosition, arcColor);
+            points.Add(currentPosition);
+        }
+
+        return points;
+    }
+
+    private void DebugJumpArc(Color arcColor, float peakHeight, float jumpTime, Func<Vector3> getHorizontalVelocity)
+    {
+        if (_jumpHeightsDebugger == null) return;
+        var positions = SamplePointsAlongJumpArc(_jumpHeightsDebugger.position, peakHeight, jumpTime, getHorizontalVelocity);
+
+        for (int i = 0; i < positions.Count - 1; i++)
+        {
+            Vector3 currentPosition = positions[i];
+            Vector3 nextedPosition = positions[i + 1];
+
+            Debug.DrawLine(currentPosition, nextedPosition, arcColor);
         }
     }
 
