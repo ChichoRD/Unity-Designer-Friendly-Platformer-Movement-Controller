@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2711019107436482031}
   - component: {fileID: 2711019107436482030}
   m_Layer: 0
-  m_Name: Platforming Set
+  m_Name: Platforming Set 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

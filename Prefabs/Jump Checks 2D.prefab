@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 3707008770084403827}
   - component: {fileID: 3707008770084403824}
   m_Layer: 0
-  m_Name: Jump Checks
+  m_Name: Jump Checks 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
