@@ -6,7 +6,7 @@
             "id": "eafd580c-4f64-43e8-a7f9-d48466972923",
             "actions": [
                 {
-                    "name": "Jump Press",
+                    "name": "Jump Press 2D",
                     "type": "Button",
                     "id": "6aeb3715-ec20-4f1a-b5a5-8b75c7141326",
                     "expectedControlType": "Button",
@@ -15,9 +15,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jump Cancel",
+                    "name": "Jump Press 3D",
+                    "type": "Button",
+                    "id": "c3351330-7002-4c28-b2e9-ad6bce881a41",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Jump Cancel 2D",
                     "type": "Button",
                     "id": "b59e5c66-f47a-4d36-9254-f5c8b38437f9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=1)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Jump Cancel 3D",
+                    "type": "Button",
+                    "id": "fe2e2759-508a-46d3-8be3-39d94da740d8",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=1)",
@@ -50,7 +68,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Jump Press",
+                    "action": "Jump Press 2D",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -61,7 +79,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Jump Press",
+                    "action": "Jump Press 2D",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -72,7 +90,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Jump Cancel",
+                    "action": "Jump Cancel 2D",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -83,7 +101,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Jump Cancel",
+                    "action": "Jump Cancel 2D",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -262,6 +280,28 @@
                     "action": "Movement 3D",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "07b612ca-90cf-4c32-800d-2ee4993fcd2d",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump Press 3D",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "52bfcb3f-c0b5-4aea-bab4-ce5bd897b840",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump Cancel 3D",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

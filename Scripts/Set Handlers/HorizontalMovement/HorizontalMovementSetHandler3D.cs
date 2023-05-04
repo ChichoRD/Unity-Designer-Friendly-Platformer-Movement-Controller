@@ -1,19 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class HorizontalMovementSetHandler3D : HorizontalMovementSetHandler
 {
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Transform _relativeTransform;
+    private Func<Vector3> _getMovementPlaneNormal;
+    private Func<Vector3, Vector3> _getRelativeMovementForce;
 
     public override void ApplyMovementForces()
     {
-        Vector3 projectedVelocity = Vector3.ProjectOnPlane(_rigidbody.velocity, Vector3.up);
-        Vector3 normalisedProjectedVelocity = new Vector3(projectedVelocity.x, 0.0f, projectedVelocity.z).normalized;
+        Vector3 projectedNormalisedVelocity = Vector3.ProjectOnPlane(_rigidbody.velocity, _getMovementPlaneNormal()).normalized;
+        Vector3 counterMovementForce = MovementInputter.MovementController.GetCounterMovementForce() * projectedNormalisedVelocity;
 
-        Vector3 counterMovementForce = MovementInputter.MovementController.GetCounterMovementForce() * normalisedProjectedVelocity;
         Vector3 movementForce = YZ(MovementInputter.GetMovementForceDueToInput());
-
-        movementForce = _relativeTransform == null ? movementForce : _relativeTransform.TransformDirection(movementForce);
+        movementForce = _getRelativeMovementForce(movementForce);
 
         _rigidbody.AddForce(counterMovementForce);
         _rigidbody.AddForce(movementForce);
@@ -23,7 +24,10 @@ public class HorizontalMovementSetHandler3D : HorizontalMovementSetHandler
 
     public override void InitialiseMovementController()
     {
-        MovementInputter.InitialiseController(() => _rigidbody.velocity.magnitude,
+        _getMovementPlaneNormal = _relativeTransform == null ? () => Vector3.up : () => _relativeTransform.up;
+        _getRelativeMovementForce = _relativeTransform == null ? (vec) => vec : (vec) => _relativeTransform.TransformDirection(vec);
+
+        MovementInputter.InitialiseController(_relativeTransform == null ? () => Vector3.ProjectOnPlane(_rigidbody.velocity, Vector3.up).magnitude : () => Vector3.ProjectOnPlane(_rigidbody.velocity, _relativeTransform.up).magnitude,
                                               () => _rigidbody.mass);
     }
 
