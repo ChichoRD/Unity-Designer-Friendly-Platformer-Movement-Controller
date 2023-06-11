@@ -107,7 +107,7 @@ public class HorizontalMovementController : MonoBehaviour
     public float GetSpeedIncrementNeeded()
     {
         float optimal = GetMovementSpeedDueToRelative();
-        float current = GetRigidbodySpeed();
+        float current = Math.Min(GetRigidbodySpeed(), _maxMovementSpeed);
 
         float increment = optimal - current;
         return increment;
