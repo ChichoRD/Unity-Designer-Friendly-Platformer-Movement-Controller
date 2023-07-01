@@ -5,7 +5,10 @@ using UnityEngine.InputSystem;
 #endif
 
 [RequireComponent(typeof(PlatformerSetHandler))]
-public class PlayerInputtedPlatformerSetHandler : MonoBehaviour, IJumpSetHandler, IMovementSetHandler
+public class PlayerInputtedPlatformerSetHandler : MonoBehaviour
+#if ENABLE_INPUT_SYSTEM
+    , IJumpSetHandler, IMovementSetHandler
+#endif
 {
 #if ENABLE_INPUT_SYSTEM
     [SerializeField] private PlatformerSetHandler _platformerSetHandler;
