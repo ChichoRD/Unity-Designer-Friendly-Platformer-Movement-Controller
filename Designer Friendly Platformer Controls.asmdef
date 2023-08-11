@@ -2,7 +2,8 @@
     "name": "PlatformerControls",
     "rootNamespace": "PlatformerControls",
     "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:9c424c5baf190bc44b4c5623793371cd"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
